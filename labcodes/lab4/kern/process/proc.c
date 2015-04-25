@@ -86,7 +86,7 @@ static struct proc_struct *
 alloc_proc(void) {
     struct proc_struct *proc = kmalloc(sizeof(struct proc_struct));
     if (proc != NULL) {
-    //LAB4:EXERCISE1 YOUR CODE
+    //LAB4:EXERCISE1 2012011281 
     /*
      * below fields in proc_struct need to be initialized
      *       enum proc_state state;                      // Process state
@@ -102,6 +102,18 @@ alloc_proc(void) {
      *       uint32_t flags;                             // Process flag
      *       char name[PROC_NAME_LEN + 1];               // Process name
      */
+     	proc->state = PROC_UNINIT;   //state
+        proc->pid = -1;              //process id
+        proc->runs = 0;              //the running times of process
+        proc->kstack = 0;            //kernel stack
+        proc->need_resched = 0;      //need to be rescheduled to release CPU? qiangzhan
+        proc->parent = NULL;         //parent process
+        proc->mm = NULL;             //memory management field
+        memset(&(proc->context), 0, sizeof(struct context)); // switch here to run process
+        proc->tf = NULL;             //trap frame for current interrupt 
+        proc->cr3 = boot_cr3;        // CR3 register: the base addr of pdt
+        proc->flags = 0;             //process flag
+        memset(proc->name, 0, PROC_NAME_LEN); // process name
     }
     return proc;
 }
