@@ -10,6 +10,7 @@ case IRQ_OFFSET + IRQ_TIMER:
     assert(current!=NULL);
     run_timer_list();
     break;
+去掉kern/schedule/sched.c中sched_class_proc_tick函数前的static
 ```
 
 ##练习一 理解内核级信号量的实现和基于内核级条件变量的哲学家就餐问题
@@ -60,6 +61,7 @@ static __noinline void __up(semaphore_t *sem, uint32_t wait_state) {
     local_intr_restore(intr_flag);
 }
 该函数实现V操作，首先也是关中断，如果信号量对应的wait_queue中没有进程在等待，直接把信号量的值加1,然后打开中断并返回；否则如果有进程在等待且让进程等待的原因是该信号量设置的，这调用wakeup_wait函数将waitqueue中等待的第一个wait删除，且把此wait关联的进程唤醒，最后开中断返回。
+
 在哲学家就餐问题中
 int state_sema[N]; /* 记录每个人状态的数组 */
 /* 信号量是一个特殊的整型变量 */
@@ -104,6 +106,7 @@ cond_signal (condvar_t *cvp) {
    cprintf("cond_signal end: cvp %x, cvp->count %d, cvp->owner->next_count %d\n", cvp, cvp->count, cvp->owner->next_count);
 }
 如果有进程执行cond_signal并且等待在该条件变量上的进程数大于0,则先将当前进程挂在monitor的next信号量上，然后唤醒挂在该条件变量上的进程，阻塞到monitor的next上，直到它执行了之后，将monitor的next_count数目减1后返回。
+
 哲学家就餐问题中，通过管程只有一个进程能访问来限制拿筷子过程和放筷子过程都是互斥的，具体实现代码如下：
 void phi_take_forks_condvar(int i) {
      down(&(mtp->mutex));
@@ -125,7 +128,6 @@ void phi_take_forks_condvar(int i) {
 }
 void phi_put_forks_condvar(int i) {
      down(&(mtp->mutex));
-
 //--------into routine in monitor--------------
      // LAB7 EXERCISE1: 2012011281
      // I ate over
