@@ -21,6 +21,7 @@
 >第一步判断offset是否和第一块对齐，如果不对齐就要先把offset到第一块末尾中的内容读出来，利用sfs_bmap_load_nolock和sfs_buf_op函>数，前者是通过路径和inode中的逻辑块index找到磁盘上对应的块，后者是对buf进行对应的读写操作；
 >第二步对对齐的块进行读写
 >第三步判断最后一块是否对齐，不对齐同1一样，进行读写。具体实现见下：
+
 ```
 if ((blkoff = offset % SFS_BLKSIZE) != 0) {                  //1 如果offset和第一块不对齐，则一直从offset先读到第一块末尾
         size = (nblks != 0) ? (SFS_BLKSIZE - blkoff) : (endpos - offset);
