@@ -16,8 +16,9 @@
 ```
 
 ##练习一 完成读文件操作的实现
+
 >实现过程：sfs_io_nolock函数本质是在内存和磁盘上传输内容，即完成SFS层面上的文件读写
->第一步判断offset是否和第一块对齐，如果不对齐就要先把offset到第一块末尾中的内容读出来，利用sfs_bmap_load_nolock和sfs_buf_op函数，前者是通过路径和inode中的逻辑块index找到磁盘上对应的块，后者是对buf进行对应的读写操作；
+>第一步判断offset是否和第一块对齐，如果不对齐就要先把offset到第一块末尾中的内容读出来，利用sfs_bmap_load_nolock和sfs_buf_op函>数，前者是通过路径和inode中的逻辑块index找到磁盘上对应的块，后者是对buf进行对应的读写操作；
 >第二步对对齐的块进行读写
 >第三步判断最后一块是否对齐，不对齐同1一样，进行读写。具体实现见下：
 ```
@@ -35,7 +36,6 @@ if ((blkoff = offset % SFS_BLKSIZE) != 0) {                  //1 如果offset和
         }
         buf += size, blkno ++, nblks --;
     }
-
     size = SFS_BLKSIZE;                  //2 读对齐的块
     while (nblks != 0) {
         if ((ret = sfs_bmap_load_nolock(sfs, sin, blkno, &ino)) != 0) {
@@ -57,6 +57,7 @@ if ((blkoff = offset % SFS_BLKSIZE) != 0) {                  //1 如果offset和
         alen += size;
     }
 ```
+
 >UNIX的pipe机制：管道是UNIX向应用软件提供的的进程间通信手段的一种，其中父进程与子进程，或者两个兄弟进程之间，可以通过系统调用建立起一个单向的通信管道。
 >但是，这种管道只能由父进程来建立，所以对于子进程来说是静态的，与生俱来的。管道两端的进程各自将该管道视作一个文件。
 >一个进程往通道中写的内容由另一个进程从通道读出，通过通道传递的内容遵循“先入先出”（FIFO）的规则。每个通道都是单向的，需要双向通信时要建立起两个通道。
