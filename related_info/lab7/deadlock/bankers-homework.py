@@ -19,9 +19,9 @@ class Bankers(object):
         #return matrix subtracted from a by b
         res = []
         for i in range(len(a)):
-            tmp = []
+            tmp = [] 
             for j in range(len(a[i])):
-                tmp.append(a[i][j]-b[i][j])
+                tmp.append(a[i][j]-b[i][j]) 
             res.append(tmp)
         return res
 
@@ -43,20 +43,36 @@ class Bankers(object):
     def ExecuteProcess(self,index):
 
         #check if less avaliable than Request
-        # YOUR CODE, YOUR ID
+        # YOUR CODE, 2012011281
+        for i in range(len(self.need[index])):
+            if self.need[index][i] > self.avaliable[i]:
+                return False
         #check END here
 
         #allocating what they need.
-        # YOUR CODE, YOUR ID
+        # YOUR CODE, 2012011281
+        for i in range(len(self.allocated[index])):
+            self.allocated[index][i] += self.need[index][i]
+            self.avaliable[i] -= self.need[index][i]
+            self.need[index][i] = 0
+        return True
         #allocating END here
-        pass
+        #pass
 
     def TempSafeCheckAfterRelease(self):
         #check if at least one request can be done after previous process done. not check whole sequances.
         #if every element of Requests can't accepted after previous process done, this mean it is not safe state
-        # YOUR CODE, YOU ID
+        # YOUR CODE, 2012011281
+        for i in range(3):
+            find = True
+            for j in range(4):
+                if self.need[i][j] > self.avaliable[j]:
+                    find = False
+            if find :
+                return True
+        return False
         #check END here
-        pass
+        #pass
 
     def print_matrixes(self):
         print "_____________________________________________"

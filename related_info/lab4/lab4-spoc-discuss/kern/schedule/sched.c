@@ -7,6 +7,7 @@
 void
 wakeup_proc(struct proc_struct *proc) {
     assert(proc->state != PROC_ZOMBIE && proc->state != PROC_RUNNABLE);
+    cprintf("process %d changed to runnable!\n", proc->pid);
     proc->state = PROC_RUNNABLE;
 }
 

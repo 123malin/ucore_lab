@@ -80,7 +80,7 @@ static struct proc_struct *
 alloc_proc(void) {
     struct proc_struct *proc = kmalloc(sizeof(struct proc_struct));
     if (proc != NULL) {
-    //LAB4:EXERCISE1 2012011346
+    //LAB4:EXERCISE1 2012011281
     /*
      * below fields in proc_struct need to be initialized
      *       enum proc_state state;                      // Process state
@@ -97,6 +97,7 @@ alloc_proc(void) {
      *       char name[PROC_NAME_LEN + 1];               // Process name
      */
         memset(proc, 0, sizeof(struct proc_struct));
+        cprinf("process generated with UNINIT!\n");
         proc->state = PROC_UNINIT;
         proc->pid = -1;
         proc->cr3 = boot_cr3;
@@ -256,7 +257,7 @@ do_fork(uint32_t clone_flags, uintptr_t stack, struct trapframe *tf) {
         goto fork_out;
     }
     ret = -E_NO_MEM;
-    //LAB4:EXERCISE2 2012011346
+    //LAB4:EXERCISE2 2012011281
     /*
      * Some Useful MACROs, Functions and DEFINEs, you can use them in below implementation.
      * MACROs or Functions:
@@ -409,6 +410,7 @@ proc_init(void) {
 
     int pid1= kernel_thread(init_main, "init main1: Hello world!!", 0);
     int pid2= kernel_thread(init_main, "init main2: Hello world!!", 0);
+    int pid3= kernel_thread(init_main, "init main3: Hello world!!", 0);
     if (pid1 <= 0 || pid2<=0) {
         panic("create kernel thread init_main1 or 2 failed.\n");
     }

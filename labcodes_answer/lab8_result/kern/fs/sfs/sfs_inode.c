@@ -153,6 +153,7 @@ lookup_sfs_nolock(struct sfs_fs *sfs, uint32_t ino) {
  */
 int
 sfs_load_inode(struct sfs_fs *sfs, struct inode **node_store, uint32_t ino) {
+	cprintf("<sfs_load_inode()>\n");
     lock_sfs_fs(sfs);
     struct inode *node;
     if ((node = lookup_sfs_nolock(sfs, ino)) != NULL) {
@@ -395,7 +396,8 @@ sfs_bmap_truncate_nolock(struct sfs_fs *sfs, struct sfs_inode *sin) {
  */
 static int
 sfs_dirent_read_nolock(struct sfs_fs *sfs, struct sfs_inode *sin, int slot, struct sfs_disk_entry *entry) {
-    assert(sin->din->type == SFS_TYPE_DIR && (slot >= 0 && slot < sin->din->blocks));
+	cprintf("<sfs_dirent_read_nolock()>\n");    
+	assert(sin->din->type == SFS_TYPE_DIR && (slot >= 0 && slot < sin->din->blocks));
     int ret;
     uint32_t ino;
 	// according to the DIR's inode and the slot of file entry, find the index of disk block which contains this file entry
@@ -514,6 +516,7 @@ sfs_lookup_once(struct sfs_fs *sfs, struct sfs_inode *sin, const char *name, str
 // sfs_opendir - just check the opne_flags, now support readonly
 static int
 sfs_opendir(struct inode *node, uint32_t open_flags) {
+	cprintf("<sfs_opendir()>\n");	
     switch (open_flags & O_ACCMODE) {
     case O_RDONLY:
         break;
@@ -531,7 +534,8 @@ sfs_opendir(struct inode *node, uint32_t open_flags) {
 // sfs_openfile - open file (no use)
 static int
 sfs_openfile(struct inode *node, uint32_t open_flags) {
-    return 0;
+	cprintf("<sfs_openfile()>\n");    
+	return 0;
 }
 
 // sfs_close - close file
@@ -649,7 +653,8 @@ out:
  */
 static inline int
 sfs_io(struct inode *node, struct iobuf *iob, bool write) {
-    struct sfs_fs *sfs = fsop_info(vop_fs(node), sfs);
+	cprintf("<sfs_io()>\n");    
+	struct sfs_fs *sfs = fsop_info(vop_fs(node), sfs);
     struct sfs_inode *sin = vop_info(node, sfs_inode);
     int ret;
     lock_sin(sin);

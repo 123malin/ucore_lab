@@ -155,6 +155,7 @@ file_testfd(int fd, bool readable, bool writable) {
 // open file
 int
 file_open(char *path, uint32_t open_flags) {
+	cprintf("<file_open()>\n");
     bool readable = 0, writable = 0;
     switch (open_flags & O_ACCMODE) {
     case O_RDONLY: readable = 1; break;
@@ -211,7 +212,8 @@ file_close(int fd) {
 // read file
 int
 file_read(int fd, void *base, size_t len, size_t *copied_store) {
-    int ret;
+	cprintf("<file_read()>\n");    
+	int ret;
     struct file *file;
     *copied_store = 0;
     if ((ret = fd2file(fd, &file)) != 0) {
